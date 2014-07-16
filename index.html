@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jquery绘制中国地图插件</title>
+<script src="js/jquery-1.7.1.min.js" type="text/javascript" ></script>
+<script src="js/raphael.js"></script>
+<script src="js/chinamapPath.js"></script>
+<script src="js/chinamap.js"></script>
+
+<script type="text/javascript" src="js/colorSelect/jquery.miniColors.js"></script>
+<link type="text/css" rel="stylesheet" href="js/colorSelect/jquery.miniColors.css" />
+<script src="js/awinEdit.js"></script>
+
+<style type="text/css">
+body{ margin:0; padding:0;}
+#ChinaMap{position:relative;width:850px; margin:auto;}
+#tiplayer{padding-right:5px;padding-left:5px;z-index:1000;min-height:1em;background:#000;max-width:250px;padding-bottom:5px;font:12px 'Microsoft YaHei',Arial,宋体,Tahoma,Sans-Serif;color:#fff;padding-top:5px;position:absolute;text-align:left;word-wrap:break-word;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+.ToolTip{padding-right:5px;padding-left:5px;z-index:1000;min-height:1em;background:#000;max-width:350px;padding-bottom:5px;font:12px 'Microsoft YaHei',Arial,宋体,Tahoma,Sans-Serif;color:#fff;padding-top:5px;position:absolute;text-align:left;word-wrap:break-word;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+.ToolTip{border-right:#c5b270 1px solid;padding-right:15px;border-top:#c5b270 1px solid;padding-left:15px;background:#fffbd6;padding-bottom:0px;border-left:#c5b270 1px solid;color:#bb861c;line-height:30px;padding-top:0px;border-bottom:#c5b270 1px solid;top:30px;}
+
+.ResultTip { visibility:hidden;}
+.form_input { position:absolute;z-index:99999;font-family:Arial; font-size:12px; font-weight:bold; padding:10px; background:#fff;}
+.colorstep {border:1px #ccc solid;border-radius:3px; margin-right:5px; vertical-align:middle;}
+.color_item { position:absolute;right:7px;top:11px; font-weight:normal;}
+input.colors{width:0px!important; height:0px!important;overflow:hidden!important;font-size:1px!important; border:none !important; background:none !important; display:none;}
+.btn_move { width:21px; height:21px;border:1px #61abd6 solid;border-radius:3px;cursor:move;background:url(delete.png) #79bee5 2px -18px no-repeat;}
+.btn_move.down {background:url(delete.png) #247aab 2px -18px no-repeat;border:1px #196c9b solid;cursor:move;}
+ul,li { margin:0; padding:0;}
+.top_item { margin-top:5px;}
+.top_item li{ height:21px; line-height:20px;padding:3px 5px; background:#79bee5;border:1px #61abd6 solid;color:#fff;display:block;margin-bottom:4px; white-space:nowrap; overflow:hidden;zoom:1; border-radius:3px;/*box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.15) inset;*/}
+.top_item li i{font-style:normal; width:15px; display:inline-block;vertical-align:middle;}
+.top_item li b{padding:0 10px;display:inline-block;vertical-align:middle;}
+.top_item li u{ float:right;display:inline-block;vertical-align:middle;width:10px; height:10px; overflow:hidden; background:url(delete.png) no-repeat; margin:5px 3px 3px 6px; cursor:pointer;}
+.top_item li a{ float:right;display:inline-block; vertical-align:middle;}
+.top_item li em{ float:right;display:inline-block; vertical-align:middle;width:17px; height:10px; overflow:hidden; background:url(delete.png) 0 -50px no-repeat; margin:6px 0 3px; cursor:pointer;}
+.top_item li em.hide{ background-position:0 -70px;}
+.top_item li input{ float:right;width:80px;height:19px;text-align:right;background:#fff; border:none; vertical-align:middle; font-size:12px;}
+
+.top_item li.lastcity,.top_item li.unselected{ background:#fff;border:1px #ccc dashed; color:#ccc;box-shadow:none;}
+.top_item li.bgColor,.top_item li.nameColor { background:#fff;border:1px #eee solid; color:#aaa;}
+.top_item li.bgColor { margin-top:20px;}
+.top_item li.bgColor a { margin-right:22px;}
+.top_item li.nameColor a { margin-right:5px;}
+.form_input .btn_submit{ background:#247aab;border:1px #196c9b solid; color:#fff; font-weight:bold; font-size:18px;text-align:center; width:100%; padding:10px 0; cursor:pointer; margin-top:20px; display:none;border-radius:3px;box-shadow:0 1px 3px 0 rgba(0, 0, 0, 0.15) inset;}
+.form_input .btn_submit:hover{ background:#196c9b;}
+</style>
+</head>
+<body>
+
+<div id="ChinaMap">
+	<div id="map"></div>
+		<div id="ToolTip" class="ToolTip" style="left:10px">
+		<div id="areaInfo"></div>
+		<div id="cityInfo"></div>
+	</div>
+	
+	<div class="ToolTip ResultTip">
+		<div id="topList" style="width:130px;float:left"></div>
+		<div id="cityList" style="display:none;float:left"></div>
+	</div>	
+</div>
+<div class="form_input">
+	<div class="btn_move"></div>
+	<div class="toggle">
+        <ul class="top_item">       
+            <li class="lastcity">Top:<i>1</i><b>请点击地图选择</b></li>
+        </ul>
+        <input type="submit" value="确认" onclick="submit();" class="btn_submit"/>
+    </div>
+</div>
+</body>
+</html>
